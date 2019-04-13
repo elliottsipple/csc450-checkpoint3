@@ -10,14 +10,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     // Query records that have usernames and passwords that match those in users table
-    $stmt = $conn->prepare("SELECT * FROM users");
-    $stmt->execute();
-    if ($stmt === false) {
-        die("Error executing the query. ");
-    } else {
-        echo 'Query Successfully Executed. ';
-    }
-    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+    $sql = file_get_contents('sql/attemptLogin.sql');
+    $params = array(
+        ':username' => $username,
+        ':password' => $password
+    );
+    $stmt = $conn->prepare($sql);
+    $stmt->execute($params);
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (empty($users)) {
         echo 'Empty';
     }

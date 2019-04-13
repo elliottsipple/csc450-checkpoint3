@@ -1,3 +1,3 @@
-SELECT *
-FROM users
-WHERE username = :username
+select *
+from users
+where username = :username;
