@@ -8,17 +8,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     // get username and password from form as variables
     $username = $_POST['username'];
     $password = $_POST['password'];
-    
+
     // Query records that have usernames and passwords that match those in users table
-    $sql = file_get_contents('sql/attemptLogin.sql');
-    $params = array(
-        'username' => $username,
-        'password' => $password
-    );
-    $statement = $conn->prepare($sql);
-    $statement->execute($params);
-    $users = $statement->fetchAll(PDO::FETCH_ASSOC);
-    
+    $stmt = $conn->prepare("SELECT * FROM users");
+    $stmt->execute();
+    if ($stmt === false) {
+        die("Error executing the query. ");
+    } else {
+        echo 'Query Successfully Executed. ';
+    }
+    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (empty($users)) {
+        echo 'Empty';
+    }
+
     // if users is not empty
     if(!empty($users)) {
         // set $user equal to the first result of $users
@@ -26,9 +29,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         // set a session variable with a key of username equal to the username returned
         $_SESSION['userID'] = $user['username'];
-        
-        // redirect to index.php file
-        header('location: index.php');
+
+        // redirect to user's index file
+        if ($username = 'producer') {
+            header('location: producer.php');
+        } else if ($username = 'dealer') {
+            header('location: dealer.php');
+        } else if ($username = 'marketer') {
+            header('location: marketer.php');
+        } else {
+            header('location: customer.php');
+        }
     }
 }
 
