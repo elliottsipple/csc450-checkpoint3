@@ -17,11 +17,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     );
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (empty($users)) {
-        echo 'Empty';
-    }
-
+    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+    
     // if users is not empty
     if(!empty($users)) {
         // set $user equal to the first result of $users
@@ -40,6 +37,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             header('location: customer.php');
         }
+    } else {
+        echo 'Invalid username or password';
     }
 }
 
