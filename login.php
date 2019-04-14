@@ -28,11 +28,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['userID'] = $user['username'];
 
         // redirect to user's index file
-        if ($username = 'producer') {
+        if ($user['username'] == 'producer') {
             header('location: producer.php');
-        } else if ($username = 'dealer') {
+        } else if ($user['username'] == 'dealer') {
             header('location: dealer.php');
-        } else if ($username = 'marketer') {
+        } else if ($user['username'] == 'marketer') {
             header('location: marketer.php');
         } else {
             header('location: customer.php');
