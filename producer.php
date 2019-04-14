@@ -4,14 +4,14 @@ include('config.php');
 include('functions.php');
 
 // get models for form
-$sql = file_get_contents('sql/getModels.sql');
-$stmt = $conn->prepare($sql);
+$sql_get_models = file_get_contents('sql/getModels.sql');
+$stmt = $conn->prepare($sql_get_models);
 $stmt->execute();
 $models = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // get dealers for form
-$sql = file_get_contents('sql/getDealers.sql');
-$stmt = $conn->prepare($sql);
+$sql_get_dealers = file_get_contents('sql/getDealers.sql');
+$stmt = $conn->prepare($sql_get_dealers);
 $stmt->execute();
 $dealers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -30,16 +30,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Make sure pdate is not in the future
     if (date("Y-m-d") >= $pdate && strlen($vin) <= 10) {
         // Make sure VIN is unique
-        $sql = file_get_contents('sql/getVehicle.sql');
+        $sql_get_vehicle = file_get_contents('sql/getVehicle.sql');
         $params = array(
             ':vin' => $vin
         );
-        $stmt = $conn->prepare($sql);
+        $stmt = $conn->prepare($sql_get_vehicle);
         $stmt->execute($params);
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $vehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // if users is empty
-        if(empty($users)) {
+        // if vehicles is empty
+        if (empty($vehicles)) {
             // Insert vehicle into vehicle table
             $sql = file_get_contents('sql/insertVehicle.sql');
             $params = array(
@@ -54,15 +54,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             );
             $conn->beginTransaction();
             $stmt = $conn->prepare($sql);
-            $stmt->execute($params);
-            $conn->commit();
-            
+            $res = $stmt->execute($params);
             // if execution fails
-            if ($stmt === false){
-                die("Error inserting vehicle.");
+            if ($res === false){
+                echo 'Error inserting vehicle.';
             } else {
-                echo 'Insert completed successfully.';
+                echo 'Vehicle has been added.';
             }
+            $conn->commit();
         } else {
             echo 'VIN already in use.';
         }
