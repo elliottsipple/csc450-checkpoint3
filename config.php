@@ -14,7 +14,6 @@ $db_password = "csc684";
 
 try {
   $conn = new PDO("oci:dbname=".$tns,$db_username,$db_password);
-  echo 'Successfully connected to Oracle.';
 } catch(PDOException $e) {
   echo ($e->getMessage());
 }

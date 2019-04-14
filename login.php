@@ -10,18 +10,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     // Query records that have usernames and passwords that match those in users table
-    $stmt = $conn->prepare("SELECT * FROM users");
-    $stmt->execute();
-    if ($stmt === false) {
-        die("Error executing the query. ");
-    } else {
-        echo 'Query Successfully Executed. ';
-    }
+    $sql = file_get_contents('sql/attemptLogin.sql');
+    $params = array(
+        ':username' => $username,
+        ':password' => $password
+    );
+    $stmt = $conn->prepare($sql);
+    $stmt->execute($params);
     $users = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (empty($users)) {
-        echo 'Empty';
-    }
-
+    
     // if users is not empty
     if(!empty($users)) {
         // set $user equal to the first result of $users
@@ -31,15 +28,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['userID'] = $user['username'];
 
         // redirect to user's index file
-        if ($username = 'producer') {
+        if ($user['username'] == 'producer') {
             header('location: producer.php');
-        } else if ($username = 'dealer') {
+        } else if ($user['username'] == 'dealer') {
             header('location: dealer.php');
-        } else if ($username = 'marketer') {
+        } else if ($user['username'] == 'marketer') {
             header('location: marketer.php');
         } else {
             header('location: customer.php');
         }
+    } else {
+        echo 'Invalid username or password';
     }
 }
 

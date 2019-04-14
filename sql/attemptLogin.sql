@@ -1,5 +1,4 @@
-SELECT *
-FROM users
-WHERE
-    username = :username AND
-    password = :password
+select *
+from users
+where username = :username
+and password = :password
