@@ -17,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     );
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);
-    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // if users is not empty
     if(!empty($users)) {
@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $users[0];
         
         // set a session variable with a key of username equal to the username returned
-        $_SESSION['userID'] = $user['username'];
+        $_SESSION['userID'] = $user['user_id'];
 
         // redirect to user's index file
         if ($username == 'producer') {
@@ -48,9 +48,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        
         <title>Login</title>
-        
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>

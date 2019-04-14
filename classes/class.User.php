@@ -7,11 +7,11 @@ class User {
     function __construct($userID, $conn) {
         $sql = file_get_contents('sql/getUser.sql');
         $params = array(
-            'username' => $_SESSION["userID"]
+            ':user_id' => $_SESSION['userID']
         );
-        $statement = $conn->prepare($sql);
-        $statement->execute($params);
-        $users = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $user = $users[0];
         
         $this->username = $user['username'];

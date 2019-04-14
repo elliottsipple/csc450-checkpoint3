@@ -1,1 +1,123 @@
-<h1>Producer</h1>
+<?php
+
+include('config.php');
+include('functions.php');
+
+// get models for form
+$sql = file_get_contents('sql/getModels.sql');
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$models = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// get dealers for form
+$sql = file_get_contents('sql/getDealers.sql');
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$dealers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// if form is submitted
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // get username and password from form as variables
+    $vin = strtoupper($_POST['vin']);
+    $model_id = $_POST['model'];
+    $dealer_id = $_POST['dealer'];
+    $color = strtolower($_POST['color']);
+    $engine = $_POST['engine'];
+    $transmission = $_POST['transmission'];
+    $pdate = $_POST['pdate'];
+    $tag_price = $_POST['tag_price'];
+
+    // Make sure pdate is not in the future
+    if (date("Y-m-d") >= $pdate && strlen($vin) <= 10) {
+        // Make sure VIN is unique
+        $sql = file_get_contents('sql/getVehicle.sql');
+        $params = array(
+            ':vin' => $vin
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // if users is empty
+        if(empty($users)) {
+            // Insert vehicle into vehicle table
+            $sql = file_get_contents('sql/insertVehicle.sql');
+            $params = array(
+                ':vin' => $vin,
+                ':model_id' => $model_id,
+                ':dealer_id' => $dealer_id,
+                ':color' => $color,
+                ':engine' => $engine,
+                ':transmission' => $transmission,
+                ':pdate' => $pdate,
+                ':tag_price' => $tag_price
+            );
+            $conn->beginTransaction();
+            $stmt = $conn->prepare($sql);
+            $stmt->execute($params);
+            $conn->commit();
+            
+            // if execution fails
+            if ($stmt === false){
+                die("Error inserting vehicle.");
+            } else {
+                echo 'Insert completed successfully.';
+            }
+        } else {
+            echo 'VIN already in use.';
+        }
+    } else {
+        echo 'Invalid production date or VIN.';
+    }
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Producer</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="page">
+            <h1>Add a vehicle</h1>
+            <form method="POST">
+                <label for="model">Model:</label>
+                <select name="model" id="model">
+                    <?php foreach($models as $model): ?>
+                        <option value="<?php echo $model['MODEL_ID'] ?>">
+                            <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <input type="text" name="vin" placeholder="VIN" required />
+                <label for="dealer">Dealer:</label>
+                <select name="dealer" id="dealer">
+                    <?php foreach($dealers as $dealer): ?>
+                        <option value="<?php echo $dealer['DEALER_ID'] ?>">
+                            <?php echo $dealer['DNAME'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <input type="text" name="color" placeholder="Color" required />
+                <label for="engine">Engine:</label>
+                <select name="engine" id="engine">
+                    <option value="V4">V4</option>
+                    <option value="V6">V6</option>
+                    <option value="V8">V8</option>
+                </select>
+                <label for="transmission">Transmission:</label>
+                <select name="transmission" id="transmission">
+                    <option value="automatic">automatic</option>
+                    <option value="manual">manual</option>
+                </select>
+                <label for="date">Production Date:</label>
+                <input type="date" name="pdate" id="date" required />
+                <input type="number" name="tag_price" placeholder="Tag Price" required />
+                <input type="submit" value="Add Vehicle" />
+            </form>
+        </div>
+    </body>
+</html>
