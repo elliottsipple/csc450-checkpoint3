@@ -23,11 +23,11 @@ spl_autoload_register('my_autoloader');
 session_start();
 
 $current_url = basename($_SERVER['REQUEST_URI']);
-/*
+
 // if username is not set in the session and current URL not login.php redirect to login page
 if (!isset($_SESSION["userID"]) && $current_url != 'login.php') {
     header("Location: login.php");
-}*/
+}
 
 // Else if session key username is set get $user from the database
 if (isset($_SESSION["userID"])) {

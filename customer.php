@@ -86,5 +86,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             <?php endforeach; ?>
         </div>
+        <div class="footer">
+            <p>Logged in as '<?php echo $user->username ?>'</p>|
+            <p><a href="logout.php">Log Out</a></p>
+        </div>
     </body>
 </html>

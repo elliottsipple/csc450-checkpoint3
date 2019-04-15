@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $users[0];
         
         // set a session variable with a key of username equal to the username returned
-        $_SESSION['userID'] = $user['user_id'];
+        $_SESSION['userID'] = $user['USER_ID'];
 
         // redirect to user's index file
         if ($username == 'producer') {
