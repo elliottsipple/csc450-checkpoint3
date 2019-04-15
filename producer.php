@@ -17,7 +17,7 @@ $dealers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // if form is submitted
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // get username and password from form as variables
+    // get vehicle information from form
     $vin = strtoupper($_POST['vin']);
     $model_id = $_POST['model'];
     $dealer_id = $_POST['dealer'];
@@ -82,40 +82,61 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body>
         <div class="page">
             <h1>Add a vehicle</h1>
-            <form method="POST">
-                <label for="model">Model:</label>
-                <select name="model" id="model">
-                    <?php foreach($models as $model): ?>
-                        <option value="<?php echo $model['MODEL_ID'] ?>">
-                            <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <input type="text" name="vin" placeholder="VIN" required />
-                <label for="dealer">Dealer:</label>
-                <select name="dealer" id="dealer">
-                    <?php foreach($dealers as $dealer): ?>
-                        <option value="<?php echo $dealer['DEALER_ID'] ?>">
-                            <?php echo $dealer['DNAME'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <input type="text" name="color" placeholder="Color" required />
-                <label for="engine">Engine:</label>
-                <select name="engine" id="engine">
-                    <option value="V4">V4</option>
-                    <option value="V6">V6</option>
-                    <option value="V8">V8</option>
-                </select>
-                <label for="transmission">Transmission:</label>
-                <select name="transmission" id="transmission">
-                    <option value="automatic">automatic</option>
-                    <option value="manual">manual</option>
-                </select>
-                <label for="date">Production Date:</label>
-                <input type="date" name="pdate" id="date" required />
-                <input type="number" name="tag_price" placeholder="Tag Price" required />
-                <input type="submit" value="Add Vehicle" />
+            <form method="POST" class="productionForm">
+                <div class="formElement">Model:</div>
+                <div class="formElement right">
+                    <select name="model" id="model">
+                        <?php foreach($models as $model): ?>
+                            <option value="<?php echo $model['MODEL_ID'] ?>">
+                                <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="formElement">VIN:</div>
+                <div class="formElement right">
+                    <input type="text" name="vin" placeholder="VIN" required />
+                </div>
+                <div class="formElement">Dealer:</div>
+                <div class="formElement right">
+                    <select name="dealer" id="dealer">
+                        <?php foreach($dealers as $dealer): ?>
+                            <option value="<?php echo $dealer['DEALER_ID'] ?>">
+                                <?php echo $dealer['DNAME'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="formElement">Color:</div>
+                <div class="formElement right">
+                    <input type="text" name="color" placeholder="Color" required />
+                </div>
+                <div class="formElement">Engine:</div>
+                <div class="formElement right">
+                    <select name="engine" id="engine">
+                        <option value="V4">V4</option>
+                        <option value="V6">V6</option>
+                        <option value="V8">V8</option>
+                    </select>
+                </div>
+                <div class="formElement">Transmission:</div>
+                <div class="formElement right">
+                    <select name="transmission" id="transmission">
+                        <option value="automatic">automatic</option>
+                        <option value="manual">manual</option>
+                    </select>
+                </div>
+                <div class="formElement">Production Date:</div>
+                <div class="formElement right">
+                    <input type="date" name="pdate" id="date" required />
+                </div>
+                <div class="formElement">Tag Price:</div>
+                <div class="formElement right">
+                    <input type="number" name="tag_price" placeholder="Tag Price" required />
+                </div>
+                <div class="formSubmit">
+                    <input type="submit" value="Add Vehicle" />
+                </div>
             </form>
         </div>
     </body>

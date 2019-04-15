@@ -1,0 +1,78 @@
+html, body {
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    margin: 0;
+    background-color: #ddd;
+}
+h1 {
+    text-align: center;
+}
+.filters {
+    text-align: center;
+}
+.carListing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 30px auto;
+    text-align: center;
+    width: 90%;
+}
+.carCard {
+    width: 70%;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 3px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    background-color: #fff;
+}
+.productionForm {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
+    width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    background-color: #fff;
+}
+.brandLogo {
+    max-width: 90%;
+    max-height: 50px;
+}
+.carInfo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 12px;
+}
+.carInfoItem {
+    width: 50%;
+    text-align: left;
+}
+.formElement {
+    width: 50%;
+    text-align: left;
+    margin: 3px 0;
+}
+.formSubmit {
+    width: 100%;
+    text-align: center;
+}
+.right {
+    text-align: right;
+}
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    text-align: center;
+    margin: 0 auto;
+}
+.loginElement {
+    margin: 3px 0;
+}
