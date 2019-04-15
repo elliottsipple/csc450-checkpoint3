@@ -92,3 +92,12 @@ h1 {
 .footer p {
     margin: 5px;
 }
+.alert {
+    text-align: center;
+    margin: 10px auto;
+    color: red;
+}
+a:link, a:visited, a:hover, a:active {
+    color: #4286f4;
+    text-decoration: none;
+}

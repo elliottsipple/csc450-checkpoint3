@@ -33,4 +33,7 @@ if (!isset($_SESSION["userID"]) && $current_url != 'login.php') {
 if (isset($_SESSION["userID"])) {
 	// new User
     $user = new User($_SESSION["userID"], $conn);
+    if ($user->username != substr($current_url, 0, strlen($current_url) - 4)) {
+        header("Location: " . $user->username . ".php");
+    }
 }

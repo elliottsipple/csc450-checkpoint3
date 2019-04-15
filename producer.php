@@ -3,6 +3,8 @@
 include('config.php');
 include('functions.php');
 
+$message = '';
+
 // get models for form
 $sql_get_models = file_get_contents('sql/getModels.sql');
 $stmt = $conn->prepare($sql_get_models);
@@ -57,16 +59,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $res = $stmt->execute($params);
             // if execution fails
             if ($res === false){
-                echo 'Error inserting vehicle.';
+                $message = 'Error inserting vehicle.';
             } else {
-                echo 'Vehicle has been added.';
+                $message = 'Vehicle has been added.';
             }
             $conn->commit();
         } else {
-            echo 'VIN already in use.';
+            $message = 'VIN already in use.';
         }
     } else {
-        echo 'Invalid production date or VIN.';
+        $message = 'Invalid production date or VIN.';
     }
 }
 
@@ -80,7 +82,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <h1>Add a vehicle</h1>
+        <h1>Add Vehicle To Inventory</h1>
         <form method="POST" class="productionForm">
             <div class="formElement">Model:</div>
             <div class="formElement right">
@@ -136,6 +138,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="formSubmit">
                 <input type="submit" value="Add Vehicle" />
             </div>
+            <div class="alert"><?php echo $message ?></div>
         </form>
         <div class="footer">
             <p>Logged in as '<?php echo $user->username ?>'</p>|
