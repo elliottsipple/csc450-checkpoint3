@@ -54,11 +54,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body>
         <div class="page">
             <h1>Login</h1>
-            <form method="POST">
+            <form method="POST" class="loginContainer">
                 <!--Gather username and password data from user to attemp login-->
-                <input type="text" name="username" placeholder="Username" />
-                <input type="password" name="password" placeholder="Password" />
-                <input type="submit" value="Log In" />
+                <input type="text" name="username" placeholder="Username" class="loginElement" />
+                <input type="password" name="password" placeholder="Password" class="loginElement" />
+                <input type="submit" value="Log In" class="loginElement" />
             </form>
         </div>
     </body>

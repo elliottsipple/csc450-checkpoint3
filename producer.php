@@ -83,34 +83,60 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="page">
             <h1>Add a vehicle</h1>
             <form method="POST" class="productionForm">
-                Model:<select name="model" id="model">
-                    <?php foreach($models as $model): ?>
-                        <option value="<?php echo $model['MODEL_ID'] ?>">
-                            <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select><br />
-                VIN:<input type="text" name="vin" placeholder="VIN" required /><br />
-                Dealer:<select name="dealer" id="dealer">
-                    <?php foreach($dealers as $dealer): ?>
-                        <option value="<?php echo $dealer['DEALER_ID'] ?>">
-                            <?php echo $dealer['DNAME'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select><br />
-                Color:<input type="text" name="color" placeholder="Color" required /><br />
-                Engine:<select name="engine" id="engine">
-                    <option value="V4">V4</option>
-                    <option value="V6">V6</option>
-                    <option value="V8">V8</option>
-                </select><br />
-                Transmission:<select name="transmission" id="transmission">
-                    <option value="automatic">automatic</option>
-                    <option value="manual">manual</option>
-                </select><br />
-                Production Date:<input type="date" name="pdate" id="date" required /><br />
-                Tag Price:<input type="number" name="tag_price" placeholder="Tag Price" required /><br />
-                <input type="submit" value="Add Vehicle" />
+                <div class="formElement">Model:</div>
+                <div class="formElement right">
+                    <select name="model" id="model">
+                        <?php foreach($models as $model): ?>
+                            <option value="<?php echo $model['MODEL_ID'] ?>">
+                                <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="formElement">VIN:</div>
+                <div class="formElement right">
+                    <input type="text" name="vin" placeholder="VIN" required />
+                </div>
+                <div class="formElement">Dealer:</div>
+                <div class="formElement right">
+                    <select name="dealer" id="dealer">
+                        <?php foreach($dealers as $dealer): ?>
+                            <option value="<?php echo $dealer['DEALER_ID'] ?>">
+                                <?php echo $dealer['DNAME'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="formElement">Color:</div>
+                <div class="formElement right">
+                    <input type="text" name="color" placeholder="Color" required />
+                </div>
+                <div class="formElement">Engine:</div>
+                <div class="formElement right">
+                    <select name="engine" id="engine">
+                        <option value="V4">V4</option>
+                        <option value="V6">V6</option>
+                        <option value="V8">V8</option>
+                    </select>
+                </div>
+                <div class="formElement">Transmission:</div>
+                <div class="formElement right">
+                    <select name="transmission" id="transmission">
+                        <option value="automatic">automatic</option>
+                        <option value="manual">manual</option>
+                    </select>
+                </div>
+                <div class="formElement">Production Date:</div>
+                <div class="formElement right">
+                    <input type="date" name="pdate" id="date" required />
+                </div>
+                <div class="formElement">Tag Price:</div>
+                <div class="formElement right">
+                    <input type="number" name="tag_price" placeholder="Tag Price" required />
+                </div>
+                <div class="formSubmit">
+                    <input type="submit" value="Add Vehicle" />
+                </div>
             </form>
         </div>
     </body>

@@ -43,7 +43,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
     <body>
         <div class="page">
-            <h1>Search for Cars</h1>
+            <h1>Find Vehicles</h1>
             <div class="filters">
                 <form method="POST">
                     <label for="dealer">Dealer:</label>
@@ -54,7 +54,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <input type="submit" value="Search for Cars" />
+                    <input type="submit" value="Search" />
                 </form>
             </div>
         </div>
@@ -67,19 +67,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="carInfoItem">
                             <?php echo 'VIN: '.$car['VIN'] ?>
                         </div>
-                        <div class="carInfoItemRight">
+                        <div class="carInfoItem right">
                             <?php echo 'Color: '.ucfirst($car['COLOR']) ?>
                         </div>
                         <div class="carInfoItem">
                             <?php echo 'Engine Type: '.$car['ENGINE'] ?>
                         </div>
-                        <div class="carInfoItemRight">
+                        <div class="carInfoItem right">
                             <?php echo 'Transmission: '.ucfirst($car['TRANSMISSION']) ?>
                         </div>
                         <div class="carInfoItem">
                             <?php echo 'Production Date: '.date("M j, Y", strtotime($car['PRODUCTION_DATE'])) ?>
                         </div>
-                        <div class="carInfoItemRight">
+                        <div class="carInfoItem right">
                             <?php echo 'Price: $'.$car['TAG_PRICE'] ?>
                         </div>
                     </div>
