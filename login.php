@@ -3,6 +3,8 @@
 // include configuration file with database connection
 include('config.php');
 
+$message = '';
+
 // if form is submitted
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     // get username and password from form as variables
@@ -25,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $users[0];
         
         // set a session variable with a key of username equal to the username returned
-        $_SESSION['userID'] = $user['user_id'];
+        $_SESSION['userID'] = $user['USER_ID'];
 
         // redirect to user's index file
         if ($username == 'producer') {
@@ -38,7 +40,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('location: customer.php');
         }
     } else {
-        echo 'Invalid username or password';
+        $message = 'Invalid username or password';
     }
 }
 
@@ -53,13 +55,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
     <body>
         <div class="page">
-            <h1>Login</h1>
+            <h1>Welcome!</h1>
             <form method="POST" class="loginContainer">
                 <!--Gather username and password data from user to attemp login-->
                 <input type="text" name="username" placeholder="Username" class="loginElement" />
                 <input type="password" name="password" placeholder="Password" class="loginElement" />
                 <input type="submit" value="Log In" class="loginElement" />
             </form>
+            <div class="alert"><?php echo $message ?></div>
         </div>
     </body>
 </html>

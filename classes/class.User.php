@@ -14,6 +14,6 @@ class User {
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $user = $users[0];
         
-        $this->username = $user['username'];
+        $this->username = $user['USERNAME'];
     }
 }

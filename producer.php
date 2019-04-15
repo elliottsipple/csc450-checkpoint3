@@ -3,6 +3,8 @@
 include('config.php');
 include('functions.php');
 
+$message = '';
+
 // get models for form
 $sql_get_models = file_get_contents('sql/getModels.sql');
 $stmt = $conn->prepare($sql_get_models);
@@ -57,16 +59,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $res = $stmt->execute($params);
             // if execution fails
             if ($res === false){
-                echo 'Error inserting vehicle.';
+                $message = 'Error inserting vehicle.';
             } else {
-                echo 'Vehicle has been added.';
+                $message = 'Vehicle has been added.';
             }
             $conn->commit();
         } else {
-            echo 'VIN already in use.';
+            $message = 'VIN already in use.';
         }
     } else {
-        echo 'Invalid production date or VIN.';
+        $message = 'Invalid production date or VIN.';
     }
 }
 
@@ -80,64 +82,67 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <div class="page">
-            <h1>Add a vehicle</h1>
-            <form method="POST" class="productionForm">
-                <div class="formElement">Model:</div>
-                <div class="formElement right">
-                    <select name="model" id="model">
-                        <?php foreach($models as $model): ?>
-                            <option value="<?php echo $model['MODEL_ID'] ?>">
-                                <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="formElement">VIN:</div>
-                <div class="formElement right">
-                    <input type="text" name="vin" placeholder="VIN" required />
-                </div>
-                <div class="formElement">Dealer:</div>
-                <div class="formElement right">
-                    <select name="dealer" id="dealer">
-                        <?php foreach($dealers as $dealer): ?>
-                            <option value="<?php echo $dealer['DEALER_ID'] ?>">
-                                <?php echo $dealer['DNAME'] ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="formElement">Color:</div>
-                <div class="formElement right">
-                    <input type="text" name="color" placeholder="Color" required />
-                </div>
-                <div class="formElement">Engine:</div>
-                <div class="formElement right">
-                    <select name="engine" id="engine">
-                        <option value="V4">V4</option>
-                        <option value="V6">V6</option>
-                        <option value="V8">V8</option>
-                    </select>
-                </div>
-                <div class="formElement">Transmission:</div>
-                <div class="formElement right">
-                    <select name="transmission" id="transmission">
-                        <option value="automatic">automatic</option>
-                        <option value="manual">manual</option>
-                    </select>
-                </div>
-                <div class="formElement">Production Date:</div>
-                <div class="formElement right">
-                    <input type="date" name="pdate" id="date" required />
-                </div>
-                <div class="formElement">Tag Price:</div>
-                <div class="formElement right">
-                    <input type="number" name="tag_price" placeholder="Tag Price" required />
-                </div>
-                <div class="formSubmit">
-                    <input type="submit" value="Add Vehicle" />
-                </div>
-            </form>
+        <h1>Add Vehicle To Inventory</h1>
+        <form method="POST" class="productionForm">
+            <div class="formElement">Model:</div>
+            <div class="formElement right">
+                <select name="model" id="model">
+                    <?php foreach($models as $model): ?>
+                        <option value="<?php echo $model['MODEL_ID'] ?>">
+                            <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="formElement">VIN:</div>
+            <div class="formElement right">
+                <input type="text" name="vin" placeholder="VIN" required />
+            </div>
+            <div class="formElement">Dealer:</div>
+            <div class="formElement right">
+                <select name="dealer" id="dealer">
+                    <?php foreach($dealers as $dealer): ?>
+                        <option value="<?php echo $dealer['DEALER_ID'] ?>">
+                            <?php echo $dealer['DNAME'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="formElement">Color:</div>
+            <div class="formElement right">
+                <input type="text" name="color" placeholder="Color" required />
+            </div>
+            <div class="formElement">Engine:</div>
+            <div class="formElement right">
+                <select name="engine" id="engine">
+                    <option value="V4">V4</option>
+                    <option value="V6">V6</option>
+                    <option value="V8">V8</option>
+                </select>
+            </div>
+            <div class="formElement">Transmission:</div>
+            <div class="formElement right">
+                <select name="transmission" id="transmission">
+                    <option value="automatic">automatic</option>
+                    <option value="manual">manual</option>
+                </select>
+            </div>
+            <div class="formElement">Production Date:</div>
+            <div class="formElement right">
+                <input type="date" name="pdate" id="date" required />
+            </div>
+            <div class="formElement">Tag Price:</div>
+            <div class="formElement right">
+                <input type="number" name="tag_price" placeholder="Tag Price" required />
+            </div>
+            <div class="formSubmit">
+                <input type="submit" value="Add Vehicle" />
+            </div>
+            <div class="alert"><?php echo $message ?></div>
+        </form>
+        <div class="footer">
+            <p>Logged in as '<?php echo $user->username ?>'</p>|
+            <p><a href="logout.php">Log Out</a></p>
         </div>
     </body>
 </html>

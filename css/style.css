@@ -1,5 +1,9 @@
+@font-face {
+    font-family: "Product Sans";
+    src: url("/fonts/Product-Sans-Regular.ttf") format("ttf");
+}
 html, body {
-    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: "Product Sans";
     margin: 0;
     background-color: #ddd;
 }
@@ -75,4 +79,25 @@ h1 {
 }
 .loginElement {
     margin: 3px 0;
+}
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    bottom: 0px;
+    margin-bottom: 10px;
+}
+.footer p {
+    margin: 5px;
+}
+.alert {
+    text-align: center;
+    margin: 10px auto;
+    color: red;
+}
+a:link, a:visited, a:hover, a:active {
+    color: #4286f4;
+    text-decoration: none;
 }
