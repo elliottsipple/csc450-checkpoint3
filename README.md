@@ -1,4 +1,4 @@
-# CSC-450 Car Database User Interfaces
+# CSC-450 Car Company Database User Interfaces
 
 This is the final project of CSC-450, developed by Group 6 (Elliott Sipple, Calvin Murphy, and Ethan Ware).
 
@@ -10,7 +10,7 @@ files for the different webpages and components of the application.
 
 ### PHP Pages
 
-The config file is used by several other webpages, as it includes the Oracle database connection and user setup. The functions file includes a get function for retrieving parameters from the URL. The login file includes a form to log a user in and redirects depending on the username provided. The logout file simply destroys a user's session and redirects to the login page. The __producer__ (Production office), __dealer__, __marketer__ (Marketing office), and __customer__ pages are individualized for the needs of each user. You can log in and test the pages for each user using the underlined usernames and the password **'password'**.
+The config file is used by several other webpages, as it includes the Oracle database connection and user setup. The functions file includes a get function for retrieving parameters from the URL. The login file includes a form to log a user in and redirects depending on the username provided. The logout file simply destroys a user's session and redirects to the login page. The __producer__ (Production office), __dealer__, __marketer__ (Marketing office), and __customer__ pages are individualized for the needs of each user. You can log in and test the pages for each user using the above usernames (in bold) and the password '**password**'.
 
 ### Setup
 
