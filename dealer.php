@@ -1,59 +1,102 @@
-
 <?php
-$tns = "(DESCRIPTION =
-  (ADDRESS = (PROTOCOL = TCP)(HOST = CITDB.NKU.EDU)(PORT = 1521))
-  (CONNECT_DATA = (SERVER = DEDICATED)(SERVICE_NAME = csc450.citdb.nku.edu)))";
-$db_username = "SIPPLEE1";
-$db_password = "csc684";
 
-try {
-    $conn = new PDO("oci:dbname=".$tns,$db_username,$db_password);
-} catch(PDOException $e) {
-    echo ($e->getMessage());
-}
-//include('config.php');
+// get database connection information from config
+include('config.php');
+
+$message = '';
+
+// get available vehicles
+$sql_get_vehicles = file_get_contents('sql/getVehicles.sql');
+$stmt = $conn->prepare($sql_get_vehicles);
+$stmt->execute();
+$vehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// get customers
+$sql_get_customers = file_get_contents('sql/getCustomers.sql');
+$stmt = $conn->prepare($sql_get_customers);
+$stmt->execute();
+$customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // get vin, customerid, saledate and price from form as variables
+    // get VIN, customer_id, sdate and price from form
     $vin = $_POST['vin'];
-    $customer_id = $_POST['customer_id'];
-	$sale_date = $_POST['sale_date'];
+    $customer_id = $_POST['customer'];
+	$sdate = $_POST['sdate'];
 	$price = $_POST['price'];
 
-	$sql = file_get_contents('sql/addSale.sql');
-	$params = array(
-		':vin' => $vin,
-        ':customer_id' => $customer_id,
-		':sale_date' => $sale_date,
-		':price' => $price
-    );
-	
-	$stmt = $conn->prepare($sql);
-    $stmt->execute($params);
-    $users = $stmt->fetch(PDO::FETCH_ASSOC);
-  
-
+    // make sure sdate is not in future
+    if (date("Y-m-d") >= $sdate) {
+        // insert sale into sale table
+        $sql = file_get_contents('sql/insertSale.sql');
+	    $params = array(
+            ':vin' => $vin,
+            ':customer_id' => $customer_id,
+            ':sdate' => $sdate,
+            ':price' => $price
+        );
+        $conn->beginTransaction();
+        $stmt = $conn->prepare($sql);
+        $res = $stmt->execute($params);
+        // if execution fails
+        if ($res === false){
+            $message = 'Error inserting sale.';
+        } else {
+            $message = 'Sale has been added.';
+        }
+        $conn->commit();
+    } else {
+        $message = 'Sale date cannot be in the future.';
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
         <meta charset="utf-8">
-		<title>dealer</title>
+		<title>Dealer</title>
 		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
-		<h1>Sale</h1>
-		<div class="page">
-            <form method="POST">
-                <!--Gather username and password data from user to attemp login-->
-                <input type="text" name="vin" placeholder="VIN" /><br>
-                <input type="number" name="customer_id" placeholder="Customer ID" /><br>
-				<input type="date" name="sale_date" placeholder="Sale Date" /><br>
-				<input type="number" name="price" placeholder="Price" />
-                &nbsp <input type="submit" value="Submit" />
-            </form>
+		<h1>Add Transaction</h1>
+        <form method="POST" class="dealerForm">
+            <div class="formElement">Vehicle:</div>
+            <div class="formElement right">
+                <select name="vin">
+                    <?php foreach($vehicles as $vehicle): ?>
+                        <option value="<?php echo $vehicle['VIN'] ?>">
+                            <?php echo $vehicle['BNAME'] . " " . $vehicle['MNAME'] . " - " . $vehicle['VIN'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="formElement">Customer:</div>
+            <div class="formElement right">
+                <select name="customer">
+                    <?php foreach($customers as $customer): ?>
+                        <option value="<?php echo $customer['CUSTOMER_ID'] ?>">
+                            <?php echo $customer['CNAME'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="formElement">Sale Date:</div>
+            <div class="formElement right">
+                <input type="date" name="sdate" required />
+            </div>
+            <div class="formElement">Price Sold:</div>
+            <div class="formElement right">
+                <input type="number" name="price" placeholder="Price Sold" required />
+            </div>
+            <div class="formSubmit">
+                <input type="submit" value="Add Sale" />
+            </div>
+            <div class="alert"><?php echo $message ?></div>
+        </form>
+        <div class="footer">
+            <p>Logged in as '<?php echo $user->username ?>'</p>|
+            <p><a href="logout.php">Log Out</a></p>
         </div>
 	</body>
 </html>

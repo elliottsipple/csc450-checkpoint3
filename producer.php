@@ -86,7 +86,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST" class="productionForm">
             <div class="formElement">Model:</div>
             <div class="formElement right">
-                <select name="model" id="model">
+                <select name="model">
                     <?php foreach($models as $model): ?>
                         <option value="<?php echo $model['MODEL_ID'] ?>">
                             <?php echo $model['BNAME'] . " " . $model['MNAME'] ?>
@@ -100,7 +100,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="formElement">Dealer:</div>
             <div class="formElement right">
-                <select name="dealer" id="dealer">
+                <select name="dealer">
                     <?php foreach($dealers as $dealer): ?>
                         <option value="<?php echo $dealer['DEALER_ID'] ?>">
                             <?php echo $dealer['DNAME'] ?>
@@ -114,7 +114,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="formElement">Engine:</div>
             <div class="formElement right">
-                <select name="engine" id="engine">
+                <select name="engine">
                     <option value="V4">V4</option>
                     <option value="V6">V6</option>
                     <option value="V8">V8</option>
@@ -122,14 +122,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="formElement">Transmission:</div>
             <div class="formElement right">
-                <select name="transmission" id="transmission">
+                <select name="transmission">
                     <option value="automatic">automatic</option>
                     <option value="manual">manual</option>
                 </select>
             </div>
             <div class="formElement">Production Date:</div>
             <div class="formElement right">
-                <input type="date" name="pdate" id="date" required />
+                <input type="date" name="pdate" required />
             </div>
             <div class="formElement">Tag Price:</div>
             <div class="formElement right">
