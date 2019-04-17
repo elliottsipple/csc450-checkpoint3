@@ -12,6 +12,10 @@ files for the different webpages and components of the application.
 
 The config file is used by several other webpages, as it includes the Oracle database connection and user setup. The functions file includes a get function for retrieving parameters from the URL. The login file includes a form to log a user in and redirects depending on the username provided. The logout file simply destroys a user's session and redirects to the login page. The __producer__ (Production office), __dealer__, __marketer__ (Marketing office), and __customer__ pages are individualized for the needs of each user. You can log in and test the pages for each user using the above usernames (in bold) and the password '**password**'.
 
+### Instructions
+
+The customer page currently allows customers to sort available vehicles by dealer. The producer page allows you to add a vehicle by selecting the model and dealer, entering a VIN, color, engine, transmission, production date, and tag price. The VIN must be unique and under 10 characters in length. The production date must not be in the future. After adding the vehicle successfully to the database, the producer will receive a success message.
+
 ### Setup
 
 Simply drag and drop all files to the root directory of __**username@csweb.hh.nku.edu**__ using FileZilla or Cyberduck, logging in with your NKU username and password. Make sure you are on the NKU Encrypted network or are connected via VPN.
