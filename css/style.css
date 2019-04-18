@@ -1,6 +1,8 @@
 @font-face {
     font-family: "Product Sans";
-    src: url("../fonts/Product-Sans-Regular.ttf") format("ttf");
+    src: url("../fonts/Product-Sans-Regular.ttf");
+    font-style: normal;
+    font-weight: 200;
 }
 html, body {
     font-family: "Product Sans", Arial;
@@ -35,7 +37,7 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
     text-align: center;
-    width: 400px;
+    width: 450px;
     margin: 20px auto;
     padding: 20px;
     border-radius: 5px;
