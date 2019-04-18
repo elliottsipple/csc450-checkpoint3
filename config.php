@@ -1,5 +1,8 @@
 <?php
 
+// set message variable
+$message = '';
+
 // Connect to the Oracle database
 $tns = "(DESCRIPTION =
   (ADDRESS = (PROTOCOL = TCP)(HOST = CITDB.NKU.EDU)(PORT = 1521))
@@ -10,7 +13,7 @@ $db_password = "csc684";
 try {
     $conn = new PDO("oci:dbname=" . $tns, $db_username, $db_password);
 } catch(PDOException $e) {
-    echo ($e->getMessage());
+    $message = ($e->getMessage());
 }
 
 // autoload classes

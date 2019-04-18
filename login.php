@@ -3,8 +3,6 @@
 // include configuration file with database connection
 include('config.php');
 
-$message = '';
-
 // if form is submitted
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     // get username and password from form as variables
