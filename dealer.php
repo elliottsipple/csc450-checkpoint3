@@ -3,8 +3,6 @@
 // get database connection information from config
 include('config.php');
 
-$message = '';
-
 // get available vehicles
 $sql_get_vehicles = file_get_contents('sql/getVehicles.sql');
 $stmt = $conn->prepare($sql_get_vehicles);

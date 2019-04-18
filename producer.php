@@ -1,9 +1,8 @@
 <?php
 
+// include config and functions files
 include('config.php');
 include('functions.php');
-
-$message = '';
 
 // get models for form
 $sql_get_models = file_get_contents('sql/getModels.sql');
