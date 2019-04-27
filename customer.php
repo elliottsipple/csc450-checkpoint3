@@ -14,21 +14,86 @@ $sql_get_cars = file_get_contents('sql/getVehicles.sql');
 $stmt = $conn->prepare($sql_get_cars);
 $stmt->execute();
 $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (empty($cars)) {
+    $message = 'No cars available.';
+} else {
+    $message = 'Showing all vehicles';
+}
 
 // if form is submitted
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dealer_id = $_POST['dealer'];
+    $min_price = $_POST['min_price'];
+    $max_price = $_POST['max_price'];
 
-    // Find vehicles with selected dealer
-    $sql = file_get_contents('sql/getVehiclesDealer.sql');
-    $params = array(
-        ':dealer_id' => $dealer_id,
-    );
-    $stmt = $conn->prepare($sql);
-    $stmt->execute($params);
-    $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (empty($cars)) {
-        'Dealer has no cars available.';
+    if($dealer_id == 'any' && $min_price == '' && $max_price == '') {
+        // return all vehicles, regarless of dealer or price
+        $sql = file_get_contents('sql/getVehicles.sql');
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($cars)) {
+            $message = 'No cars available.';
+        } else {
+            $message = 'Showing all vehicles';
+        }
+    } else if($dealer_id == 'any') {
+        if($min_price == '') {
+            $min_price = 0;
+        }
+        if($max_price == '') {
+            $max_price = 999999999;
+        }
+        // Find vehicles in price range, regarless of dealer
+        $sql = file_get_contents('sql/getVehiclesPrice.sql');
+        $params = array(
+            ':min_price' => $min_price,
+            ':max_price' => $max_price
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($cars)) {
+            $message = 'No cars available in given price range.';
+        } else {
+            $message = 'Showing cars with tag price between $'.$min_price.' and $'.$max_price;
+        }
+    } else if($min_price == '' && $max_price == '') {
+        // Find vehicles with selected dealer
+        $sql = file_get_contents('sql/getVehiclesDealer.sql');
+        $params = array(
+            ':dealer_id' => $dealer_id
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($cars)) {
+            $message = 'Dealer has no cars available.';
+        } else {
+            $message = 'Showing cars at '.$cars[0]['DNAME'];
+        }
+    } else {
+        if($min_price == '') {
+            $min_price = 0;
+        }
+        if($max_price == '') {
+            $max_price = 999999999;
+        }
+        // find vehicles with selected dealer in given price range
+        $sql = file_get_contents('sql/getVehiclesDealerPrice.sql');
+        $params = array(
+            ':dealer_id' => $dealer_id,
+            ':min_price' => $min_price,
+            ':max_price' => $max_price
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($cars)) {
+            $message = 'Dealer has no cars available in given price range.';
+        } else {
+            $message = 'Showing cars at '.$cars[0]['DNAME'].' with tag price between $'.$min_price.' and $'.$max_price;
+        }
     }
 }
 
@@ -45,18 +110,31 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="page">
             <h1>Find Vehicles</h1>
             <div class="filters">
-                <form method="POST">
-                    <label for="dealer">Dealer:</label>
-                    <select name="dealer" id="dealer">
-                        <?php foreach($dealers as $dealer): ?>
-                            <option value="<?php echo $dealer['DEALER_ID'] ?>">
-                                <?php echo $dealer['DNAME'] ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <input type="submit" value="Search" />
+                <form method="POST" class="customerForm">
+                    <div class="customerFormElement">
+                        <label for="dealer">Dealer:</label>
+                        <select name="dealer" id="dealer">
+                            <option value="any">Any</option>
+                            <?php foreach($dealers as $dealer): ?>
+                                <option value="<?php echo $dealer['DEALER_ID'] ?>">
+                                    <?php echo $dealer['DNAME'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="customerFormElement">
+                        <label for="min">Price Range:</label>
+                        <input type="number" name="min_price" id="min" placeholder="Minimum Price" />
+                        <input type="number" name="max_price" placeholder="Maximum Price" />
+                    </div>
+                    <div class="customerFormElement">
+                        <input type="submit" value="Search" />
+                    </div>
                 </form>
             </div>
+        </div>
+        <div class="message">
+            <?php echo $message; ?>
         </div>
         <div class="carListing">
             <?php foreach($cars as $car): ?>
