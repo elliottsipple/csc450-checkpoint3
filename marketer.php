@@ -1,59 +1,21 @@
 <?php
 
+// include config file with db connection
 include('config.php');
 
-// get query 2 for form
-$sql_Marketer_q2 = file_get_contents('sql/Marketer_q2.sql');
-$stmt = $conn->prepare($sql_Marketer_q2);
-$stmt->execute();
-$q2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// get query 3 for form
-$sql_Marketer_q3 = file_get_contents('sql/Marketer_q3.sql');
-$stmt = $conn->prepare($sql_Marketer_q3);
-$stmt->execute();
-$q3 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// get query 4 for form
-$sql_Marketer_q4 = file_get_contents('sql/Marketer_q4.sql');
-$stmt = $conn->prepare($sql_Marketer_q4);
-$stmt->execute();
-$q4 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// get query 5 for form
-$sql_Marketer_q5 = file_get_contents('sql/Marketer_q5.sql');
-$stmt = $conn->prepare($sql_Marketer_q5);
-$stmt->execute();
-$q5 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// get query 6 for form
-$sql_Marketer_q6 = file_get_contents('sql/Marketer_q6.sql');
-$stmt = $conn->prepare($sql_Marketer_q6);
-$stmt->execute();
-$q6 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// get query 7 for form
-$sql_Marketer_q7 = file_get_contents('sql/Marketer_q7.sql');
-$stmt = $conn->prepare($sql_Marketer_q7);
-$stmt->execute();
-$q7 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+// initialize query as 0
+$query = 0;
 
 // if form is submitted
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $dealer_id = $_POST['dealer'];
+	// set queryNum to given query
+	$query = $_POST['query'];
 
-    // Find vehicles with selected dealer
-    $sql = file_get_contents('sql/getVehiclesDealer.sql');
-    $params = array(
-        ':dealer_id' => $dealer_id,
-    );
-    $stmt = $conn->prepare($sql);
-    $stmt->execute($params);
-    $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (empty($cars)) {
-        'Dealer has no cars available.';
-    }
+	// get query data
+	$sql = file_get_contents('sql/marketerQ'.$query.'.sql');
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>
@@ -66,114 +28,124 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <!--div class="page">
-            <h1>Find Vehicles</h1>
+        <div class="page">
+            <h1>View Query Data</h1>
             <div class="filters">
                 <form method="POST">
-                    <label for="dealer">Dealer:</label>
-                    <select name="dealer" id="dealer">
-                        <?php foreach($dealers as $dealer): ?>
-                            <option value="<?php echo $dealer['DEALER_ID'] ?>">
-                                <?php echo $dealer['DNAME'] ?>
-                            </option>
-                        <?php endforeach; ?>
+                    <select name="query">
+                        <option value="2">Show sales trends over the past 3 years</option>
+						<option value="3">Show top brand(s) by dollar-amount sold in the past year</option>
+						<option value="4">Show top dealer(s) by dollar-amount sold in the past year</option>
+						<option value="5">Show top brand(s) by unit sales in the past year</option>
+						<option value="6">In what month(s) in which convertibles sell best?</option>
+						<option value="7">Which dealer(s) keep a vehicle in inventory for the longest average time?</option>
                     </select>
                     <input type="submit" value="Search" />
                 </form>
             </div>
-        </div-->
-        <div>
-			<table><!--query 2-->
-				<tr><th>bname</th><th>year</th><th>gender</th><th>income_range</th><th>total_sold</th></tr>
-				<?php foreach($q2 as $r): ?>
-					<tr>
-						<td>
-							<?php echo $r['BNAME'] ?>
-						</td>
-						<td>
-							<?php echo $r['YEAR'] ?>
-						</td>
-						<td>
-							<?php echo $r['GENDER'] ?>
-						</td>
-						<td>
-							<?php echo $r['INCOME_RANGE'] ?>
-						</td>
-						<td>
-						<?php echo $r['TOTAL_SOLD'] ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
-					
-			<table><!--query 3-->
-				<tr><th>bname</th><th>total</th>
-				<?php foreach($q3 as $r): ?>
-					<tr>
-						<td>
-							<?php echo $r['BNAME'] ?>
-						</td>
-						<td>
-							<?php echo $r['TOTAL'] ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
-			
-			
-			<table><!--query 4-->
-				<tr><th>dname</th><th>total</th>
-				<?php foreach($q4 as $r): ?>
-					<tr>
-						<td>
-							<?php echo $r['DNAME'] ?>
-						</td>
-						<td>
-							<?php echo $r['TOTAL'] ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
-			
-			<table><!--query 5-->
-				<tr><th>bname</th><th>total</th>
-				<?php foreach($q5 as $r): ?>
-					<tr>
-						<td>
-							<?php echo $r['BNAME'] ?>
-						</td>
-						<td>
-							<?php echo $r['TOTAL'] ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
-			
-			<table><!--query 6-->
-				<tr><th>month</th><th>convertibles_sold</th>
-				<?php foreach($q6 as $r): ?>
-					<tr>
-						<td>
-							<?php echo $r['MONTH'] ?>
-						</td>
-						<td>
-							<?php echo $r['CONVERTIBLES_SOLD'] ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
-			
-			<table><!--query 7-->
-				<tr><th>dealer</th>
-				<?php foreach($q7 as $r): ?>
-					<tr>
-						<td>
-							<?php echo $r['DEALER'] ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
         </div>
+		<?php if($query != 0): ?>
+        <div class="tableContainer">
+			<?php switch($query):
+			case 2: ?>
+				<h3>Sales Trends</h3>
+				<table>
+					<tr>
+						<th>Brand</th>
+						<th>Year</th>
+						<th>Gender</th>
+						<th>Income Range</th>
+						<th>Total Sold</th>
+					</tr>
+					<?php foreach($results as $result): ?>
+						<tr>
+							<td class="left"><?php echo $result['BNAME'] ?></td>
+							<td><?php echo $result['YEAR'] ?></td>
+							<td><?php echo $result['GENDER'] ?></td>
+							<td><?php echo $result['INCOME_RANGE'] ?></td>
+							<td class="right"><?php echo '$'.$result['TOTAL_SOLD'] ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php break; ?>
+			<?php case 3: ?>
+				<h3>Brands by Dollar-Amount Sold in the Past Year</h3>
+				<table>
+					<tr>
+						<th>Brand</th>
+						<th>Total Sold</th>
+					</tr>
+					<?php foreach($results as $result): ?>
+						<tr>
+							<td class="left"><?php echo $result['BNAME'] ?></td>
+							<td class="right"><?php echo '$'.$result['TOTAL'] ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php break; ?>
+			<?php case 4: ?>
+				<h3>Dealers by Dollar-Amount Sold in the Past Year</h3>
+				<table>
+					<tr>
+						<th>Dealer Name</th>
+						<th>Total Sold</th>
+					</tr>
+					<?php foreach($results as $result): ?>
+						<tr>
+							<td class="left"><?php echo $result['DNAME'] ?></td>
+							<td class="right"><?php echo '$'.$result['TOTAL'] ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php break; ?>
+			<?php case 5: ?>
+				<h3>Brands by Units Sold in the Past Year</h3>
+				<table>
+					<tr>
+						<th>Brand</th>
+						<th>Total Sold</th>
+					</tr>
+					<?php foreach($results as $result): ?>
+						<tr>
+							<td class="left"><?php echo $result['BNAME'] ?></td>
+							<td class="right"><?php echo $result['TOTAL'].' units' ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php break; ?>
+			<?php case 6: ?>
+				<h3>Convertible Sales</h3>
+				<table>
+					<tr>
+						<th>Month</th>
+						<th>Convertibles Sold</th>
+					</tr>
+					<?php foreach($results as $result): ?>
+						<tr>
+							<td><?php echo ucfirst($result['MONTH']) ?></td>
+							<td class="right"><?php echo $result['CONVERTIBLES_SOLD'] ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php break; ?>
+			<?php case 7: ?>
+				<h3>Dealers by Average Time a Vehicle Stays in Inventory</h3>
+				<table>
+					<tr>
+						<th>Dealer Name</th>
+						<th>Average Time in Inventory</th>
+					</tr>
+					<?php foreach($results as $result): ?>
+						<tr>
+							<td class="left"><?php echo $result['DEALER'] ?></td>
+							<td class="right"><?php echo round($result['AVG_TIME_IN_INVENTORY'], 2).' days' ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php break; ?>
+			<?php endswitch; ?>
+        </div>
+		<?php endif; ?>
         <div class="footer">
             <p>Logged in as '<?php echo $user->username ?>'</p>|
             <p><a href="logout.php">Log Out</a></p>

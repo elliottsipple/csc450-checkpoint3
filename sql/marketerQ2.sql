@@ -1,7 +1,7 @@
 select bname, year, gender, income_range, sum(price_sold) as total_sold
 from (
   select bname, extract(year from s.sdate) as year, c.gender as gender, s.price_sold, case
-    when c.annual_income < 50000 then 'under_50k'
+    when c.annual_income < 50000 then 'under-50k'
     when c.annual_income >=50000 and c.annual_income < 70000 then '50k-70k'
     when c.annual_income >=70000 and c.annual_income < 100000 then '70k-100k'
     when c.annual_income >=100000 and c.annual_income < 200000 then '100k-200k'
