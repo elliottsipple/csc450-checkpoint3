@@ -4,7 +4,7 @@
 include('config.php');
 
 // if form is submitted
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // get username and password from form as variables
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -20,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // if users is not empty
-    if(!empty($users)) {
+    if (!empty($users)) {
         // set $user equal to the first result of $users
         $user = $users[0];
         

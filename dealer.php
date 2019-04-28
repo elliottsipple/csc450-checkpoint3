@@ -1,21 +1,21 @@
 <?php
 
-// get database connection information from config
+// include config file with db connection
 include('config.php');
 
-// get available vehicles
+// get available vehicles for form
 $sql_get_vehicles = file_get_contents('sql/getVehicles.sql');
 $stmt = $conn->prepare($sql_get_vehicles);
 $stmt->execute();
 $vehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// get customers
+// get customers for form
 $sql_get_customers = file_get_contents('sql/getCustomers.sql');
 $stmt = $conn->prepare($sql_get_customers);
 $stmt->execute();
 $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // get VIN, customer_id, sdate and price from form
     $vin = $_POST['vin'];
     $customer_id = $_POST['customer'];

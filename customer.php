@@ -1,7 +1,7 @@
 <?php
 
+// include config file with db connection
 include('config.php');
-include('functions.php');
 
 // get dealers for form
 $sql_get_dealers = file_get_contents('sql/getDealers.sql');
@@ -21,12 +21,12 @@ if (empty($cars)) {
 }
 
 // if form is submitted
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dealer_id = $_POST['dealer'];
     $min_price = $_POST['min_price'];
     $max_price = $_POST['max_price'];
 
-    if($dealer_id == 'any' && $min_price == '' && $max_price == '') {
+    if ($dealer_id == 'any' && $min_price == '' && $max_price == '') {
         // return all vehicles, regarless of dealer or price
         $sql = file_get_contents('sql/getVehicles.sql');
         $stmt = $conn->prepare($sql);
@@ -37,12 +37,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $message = 'Showing all vehicles';
         }
-    } else if($dealer_id == 'any') {
-        if($min_price == '') {
+    } else if ($dealer_id == 'any') {
+        $no_min = false;
+        $no_max = false;
+        if ($min_price == '') {
             $min_price = 0;
+            $no_min = true;
         }
-        if($max_price == '') {
+        if ($max_price == '') {
             $max_price = 999999999;
+            $no_max = true;
         }
         // Find vehicles in price range, regarless of dealer
         $sql = file_get_contents('sql/getVehiclesPrice.sql');
@@ -56,9 +60,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($cars)) {
             $message = 'No cars available in given price range.';
         } else {
-            $message = 'Showing cars with tag price between $'.$min_price.' and $'.$max_price;
+            if ($no_min && !$no_max) {
+                $message = 'Showing cars with tag price below $'.$max_price;
+            } else if ($no_max && !$no_min) {
+                $message = 'Showing cars with tag price above $'.$min_price;
+            } else {
+                $message = 'Showing cars with tag price between $'.$min_price.' and $'.$max_price;
+            }
         }
-    } else if($min_price == '' && $max_price == '') {
+    } else if ($min_price == '' && $max_price == '') {
         // Find vehicles with selected dealer
         $sql = file_get_contents('sql/getVehiclesDealer.sql');
         $params = array(
@@ -73,11 +83,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = 'Showing cars at '.$cars[0]['DNAME'];
         }
     } else {
-        if($min_price == '') {
+        $no_min = false;
+        $no_max = false;
+        if ($min_price == '') {
             $min_price = 0;
+            $no_min = true;
         }
-        if($max_price == '') {
+        if ($max_price == '') {
             $max_price = 999999999;
+            $no_max = true;
         }
         // find vehicles with selected dealer in given price range
         $sql = file_get_contents('sql/getVehiclesDealerPrice.sql');
@@ -92,7 +106,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($cars)) {
             $message = 'Dealer has no cars available in given price range.';
         } else {
-            $message = 'Showing cars at '.$cars[0]['DNAME'].' with tag price between $'.$min_price.' and $'.$max_price;
+            if ($no_min && !$no_max) {
+                $message = 'Showing cars at '.$cars[0]['DNAME'].' with tag price below $'.$max_price;
+            } else if ($no_max && !$no_min) {
+                $message = 'Showing cars at '.$cars[0]['DNAME'].' with tag price above $'.$min_price;
+            } else {
+                $message = 'Showing cars at '.$cars[0]['DNAME'].' with tag price between $'.$min_price.' and $'.$max_price;
+            }
         }
     }
 }
