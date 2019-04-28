@@ -1,10 +1,7 @@
 <?php
 
-// include config file
+// include config file with db connection
 include('config.php');
-
-// include functions file
-include('functions.php');
 
 // destroy current session
 session_destroy();

@@ -7,7 +7,7 @@ include('config.php');
 $query = 0;
 
 // if form is submitted
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// set queryNum to given query
 	$query = $_POST['query'];
 
@@ -44,7 +44,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
             </div>
         </div>
-		<?php if($query != 0): ?>
+		<?php if ($query != 0): ?>
         <div class="tableContainer">
 			<?php switch($query):
 			case 2: ?>
@@ -122,7 +122,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 					</tr>
 					<?php foreach($results as $result): ?>
 						<tr>
-							<td><?php echo ucfirst($result['MONTH']) ?></td>
+							<td class="left"><?php echo ucfirst($result['MONTH']) ?></td>
 							<td class="right"><?php echo $result['CONVERTIBLES_SOLD'] ?></td>
 						</tr>
 					<?php endforeach; ?>

@@ -1,8 +1,7 @@
 <?php
 
-// include config and functions files
+// include config file with db connection
 include('config.php');
-include('functions.php');
 
 // get models for form
 $sql_get_models = file_get_contents('sql/getModels.sql');
@@ -17,7 +16,7 @@ $stmt->execute();
 $dealers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // if form is submitted
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // get vehicle information from form
     $vin = strtoupper($_POST['vin']);
     $model_id = $_POST['model'];
